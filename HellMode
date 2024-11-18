@@ -1,0 +1,7 @@
+wait(10)    
+-- Mengaktifkan HellMode
+local args = 
+ {
+   [1] = "HellMode"
+ }
+game:GetService("ReplicatedStorage").Remotes.Main.Modifiers:FireServer(unpack(args))
