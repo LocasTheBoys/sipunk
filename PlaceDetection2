@@ -28,7 +28,7 @@ if game.PlaceId == 15860930970 then
         "https://raw.githubusercontent.com/LocasTheBoys/sipunk/refs/heads/main/upgrade3B",
         "https://raw.githubusercontent.com/LocasTheBoys/sipunk/refs/heads/main/HellMode",
         "https://raw.githubusercontent.com/LocasTheBoys/sipunk/refs/heads/main/AutoSkip",
-        "https://raw.githubusercontent.com/LocasTheBoys/sipunk/refs/heads/main/TryAgain"
+        "https://raw.githubusercontent.com/LocasTheBoys/efentedeh/refs/heads/main/TryAgain2"
     }
     
     executeScripts(scripts)
