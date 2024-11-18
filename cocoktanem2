@@ -7,7 +7,7 @@ local waitTimeBetweenLoops = 2
 local loopCount = 5
 local targetWaves = { "Wave 5/15"}
 local stopWave = "Wave 7/15"
-local targetMoney = 1000 -- Ubah jumlah target money sesuai kebutuhan
+local targetMoney = 5000 -- Ubah jumlah target money sesuai kebutuhan
 local PlacementMaxCap = 2 -- Kapasitas maksimum unit yang bisa dipasang
 
 local Players = game:GetService("Players")
