@@ -1,0 +1,129 @@
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PathWaveDetection = Player.PlayerGui.Top.Wave
+
+-- Konfigurasi tambahan
+local petName = "Nightguard Afton" -- Nama pet yang akan disummon
+local waitTimeTeleport = 1 -- Waktu tunggu setelah teleportasi sebelum summon pet
+local waitTimeBetweenTeleports = 2 -- Waktu tunggu sebelum teleportasi berikutnya
+local waitTimeBetweenLoops = 3 -- Waktu tunggu antara setiap loop
+local loopCount = 5 -- Jumlah pengulangan teleportasi dan summon pet
+local targetWaves = { "Wave 0/15", "Wave 1/15" } -- Wave yang diinginkan untuk mulai summon 
+local stopWave = "Wave 4/15" -- Wave di mana loop akan berhenti 
+local executedWaves = {} -- Menyimpan status eksekusi untuk setiap wave
+local stopLoop = false -- Status untuk menghentikan loop
+
+-- Tunggu sampai "Map" ada di Workspace
+local function waitForMap()
+    print("Menunggu Map untuk ter-load...")
+    while not workspace:FindFirstChild("Map") do
+        workspace.ChildAdded:Wait() -- Menunggu hingga "Map" ditambahkan
+    end
+    print("Map ter-load.")
+end
+
+-- Fungsi untuk menghitung posisi dengan offset
+local function calculateAdjustedPosition(part1, part2, part3, part4, offset)
+    -- Memastikan semua bagian memiliki .Position (Vector3)
+    if part1 and part2 and part3 and part4 then
+        local midpoint1 = (part1.Position + part2.Position) / 2
+        local midpoint2 = (part3.Position + part4.Position) / 2
+        return ((midpoint1 + midpoint2) / 2) + offset
+    else
+        warn("Bagian yang diperlukan untuk menghitung posisi tidak ditemukan.")
+        return nil
+    end
+end
+
+-- Fungsi teleportasi ke posisi yang disesuaikan
+local function teleportAndSummon(part1, part2, part3, part4, offset)
+    if stopLoop then return end
+
+    local character = Player.Character or Player.CharacterAdded:Wait()
+    local finalPosition = calculateAdjustedPosition(part1, part2, part3, part4, offset)
+    if finalPosition then
+        character.HumanoidRootPart.CFrame = CFrame.new(finalPosition)
+
+        task.wait(waitTimeTeleport)
+
+        -- Memanggil fungsi reset
+        local argsReset = { [1] = "Reset" }
+        game:GetService("ReplicatedStorage").Remotes.Misc.StopSettings:FireServer(unpack(argsReset))
+
+        for i = 1, 68 do
+            game:GetService("ReplicatedStorage").Remotes.Misc.StopSettings:FireServer()
+        end
+
+        -- Melakukan summon pet
+        local humanoidRootPartCFrame = character.HumanoidRootPart.CFrame
+        local argsSummon = { [1] = petName, [2] = humanoidRootPartCFrame }
+        game:GetService("ReplicatedStorage").Remotes.Towers.SummonTower:FireServer(unpack(argsSummon))
+    else
+        warn("Posisi akhir tidak valid, teleportasi dibatalkan.")
+    end
+end
+
+-- Menyiapkan daftar koordinat teleportasi
+local function setupPartList()
+    local offsetList = {
+        Vector3.new(-27, 0, -10),  -- Offset posisi ke-1
+        Vector3.new(-27, 0, -5),  -- Offset posisi ke-2
+        Vector3.new(-27, 0, 1)   -- Offset posisi ke-3
+    }
+    local partList = {}
+
+    for _, offset in ipairs(offsetList) do
+        local path1 = workspace.Map:WaitForChild("Paths"):WaitForChild("1"):WaitForChild("Start")
+        local path2 = workspace.Map:WaitForChild("Paths"):WaitForChild("1"):WaitForChild("2")
+        local path4 = workspace.Map:WaitForChild("Paths"):WaitForChild("1"):WaitForChild("3")
+        local path3_5 = workspace.Map:WaitForChild("Paths"):WaitForChild("2"):WaitForChild("4")
+        local path2_5 = Workspace.Map:WaitForChild("Paths"):WaitForChild("3"):WaitForChild("1")
+
+        -- Pastikan setiap path ditemukan sebelum menambahkannya ke partList
+        if path1 and path2 and path4 and path3_5 and path2_5 then
+            table.insert(partList, {path1, path2, path4, path3_5, offset})
+        else
+            warn("Salah satu bagian path tidak ditemukan, cek struktur Map.")
+        end
+    end
+
+    return partList
+end
+
+-- Fungsi utama untuk memulai summon
+local function startSummoning()
+    local partList = setupPartList()
+    for i = 1, loopCount do
+        if stopLoop then break end
+
+        for _, parts in ipairs(partList) do
+            teleportAndSummon(parts[1], parts[2], parts[3], parts[4], parts[5])
+            task.wait(waitTimeBetweenTeleports)
+        end
+
+        task.wait(waitTimeBetweenLoops)
+    end
+end
+
+-- Listener untuk mendeteksi perubahan teks di PathWaveDetection
+PathWaveDetection:GetPropertyChangedSignal("Text"):Connect(function()
+    local waveText = PathWaveDetection.Text
+
+    -- Hentikan loop jika wave mencapai atau melebihi stopWave
+    if waveText == stopWave then
+        stopLoop = true
+        print("Loop dihentikan karena mencapai " .. stopWave)
+        return
+    end
+
+    -- Jika wave yang diinginkan terdeteksi dan belum dieksekusi, mulai summon
+    if table.find(targetWaves, waveText) and not executedWaves[waveText] then
+        executedWaves[waveText] = true
+
+        -- Mulai summon
+        startSummoning()
+    end
+end)
+
+-- Menunggu sampai "Map" ter-load
+waitForMap()
