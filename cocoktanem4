@@ -8,7 +8,7 @@ local loopCount = 5
 local targetWaves = { "Wave 15/15"}
 local stopWave = "Wave 15/15"
 local targetMoney = 100000 -- Ubah jumlah target money sesuai kebutuhan
-local PlacementMaxCap = 1 -- Kapasitas maksimum unit yang bisa dipasang
+local PlacementMaxCap = 3 -- Kapasitas maksimum unit yang bisa dipasang
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
