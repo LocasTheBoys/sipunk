@@ -1,5 +1,4 @@
 wait(15)
--- Konfigurasi
 local targetWavesForUpgrade = { "Wave 11/15", "Wave 12/15" } -- Wave di mana upgrade diaktifkan
 local stopWave = "Wave 15/15" -- Wave di mana loop upgrade akan berhenti
 local petNameToUpgrade = "Scarecrow Foxy" -- Nama pet yang akan di-upgrade
