@@ -1,5 +1,5 @@
--- Konfigurasi
 wait(15)
+-- Konfigurasi
 local petName = "Scarecrow Foxy"
 local waitTimeTeleport = 1
 local waitTimeBetweenTeleports = 2
