@@ -1,14 +1,14 @@
 wait(15)
 -- Konfigurasi
-local petName = "Eclipse Ballora"
+local petName = "ITS ME"
 local waitTimeTeleport = 1
 local waitTimeBetweenTeleports = 2
 local waitTimeBetweenLoops = 2
 local loopCount = 5
-local targetWaves = { "Wave 15/15"}
+local targetWaves = { "Wave 11/15", "Wave 12/15" }
 local stopWave = "Wave 15/15"
-local targetMoney = 100000 -- Ubah jumlah target money sesuai kebutuhan
-local PlacementMaxCap = 3 -- Kapasitas maksimum unit yang bisa dipasang
+local targetMoney = 700000 -- Ubah jumlah target money sesuai kebutuhan
+local PlacementMaxCap = 1 -- Kapasitas maksimum unit yang bisa dipasang
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
@@ -86,7 +86,7 @@ local function startSummoning()
           workspace.Map:WaitForChild("Paths"):WaitForChild("2"):WaitForChild("4"),
           workspace.Map:WaitForChild("Paths"):WaitForChild("3"):WaitForChild("1")
         }
-        teleportAndSummon(parts1, Vector3.new(-17, 0, 6)) -- Offset untuk Posisi 1
+        teleportAndSummon(parts1, Vector3.new(-20, 0, 0)) -- Offset untuk Posisi 1
         task.wait(waitTimeBetweenTeleports)
 
         task.wait(waitTimeBetweenLoops)
