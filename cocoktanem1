@@ -9,7 +9,7 @@ local waitTimeBetweenTeleports = 2 -- Waktu tunggu sebelum teleportasi berikutny
 local waitTimeBetweenLoops = 3 -- Waktu tunggu antara setiap loop
 local loopCount = 5 -- Jumlah pengulangan teleportasi dan summon pet
 local targetWaves = { "Wave 0/15", "Wave 1/15" } -- Wave yang diinginkan untuk mulai summon 
-local stopWave = "Wave 5/15" -- Wave di mana loop akan berhenti 
+local stopWave = "Wave 4/15" -- Wave di mana loop akan berhenti 
 local executedWaves = {} -- Menyimpan status eksekusi untuk setiap wave
 local stopLoop = false -- Status untuk menghentikan loop
 
